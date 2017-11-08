@@ -18,25 +18,31 @@ import java.util.Scanner;
  *
  */
 public class Project3 {
-	
+	/** Heap of size 5000 of weighted edges */
 	Heap heap = new Heap();
+	/** Adjacency list of size 1000 of vertices */
 	AdjacencyList aList = new AdjacencyList();
 
+	/**
+	 * Main method begins execution of program
+	 * @param args Command line arguments
+	 * @throws FileNotFoundException If input/output filenames not found
+	 * @throws IOException If input/output errors occur
+	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		Project3 obj = new Project3();
 		obj.execute();
 	}
 	
 	/**
-	 * Opens input and output reader and writer, populates node arrays,
-	 * calls for tree to be built, answers relationship queires, 
-	 * then prints level-order traversal
+	 * Opens input and output reader and writer, populates heap and adjacency list,
+	 * calls for MST to be calculated, and prints results
 	 * @throws FileNotFoundException if files not found
 	 * @throws IOException if problem with input/output
 	 */
-	
 	private void execute() throws FileNotFoundException, IOException {
 		// prepare input and output streams
+		
 		// for redirection
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
 		BufferedWriter outputWriter = new BufferedWriter(new OutputStreamWriter(System.out, "UTF-8"));
@@ -70,23 +76,34 @@ public class Project3 {
 			line = inputReader.readLine();
 			scan = new Scanner(line);
 		}
-		outputHeap(outputWriter); // print heap now before using deleteMin to find the Minimum Spanning Tree messes up the heap
+		outputHeap(outputWriter); // print heap now before using deleteMin in MST() messes up the heap
 		EdgeList mstEdges = MST();
 		outputRest(mstEdges, outputWriter); // print rest of the data
 		
+		// close streams
 		scan.close();
 		inputReader.close();
 		outputWriter.close();
 	}
 
+	/**
+	 * Print heap results
+	 * @param outputWriter Stream for outputting text to file
+	 * @throws IOException if input/output error occurs
+	 */
 	private void outputHeap(BufferedWriter outputWriter) throws IOException {
-		// print Heap
 		for(int i = 0; i < heap.size(); i++) {
 			String print = String.format("%4d %4d\n", heap.printEdge(i).getVertex1(), heap.printEdge(i).getVertex2());
 			outputWriter.write(print);
 		}
 	}
 
+	/**
+	 * Print Minimum Spanning Tree and Adjacency List results
+	 * @param mstEdges Minimum Spanning Tree vertex/edge list
+	 * @param outputWriter Stream for outputting text to file
+	 * @throws IOException if input/output error occurs
+	 */
 	private void outputRest(EdgeList mstEdges, BufferedWriter outputWriter) throws IOException {
 		String print;
 		// print MST
@@ -117,6 +134,10 @@ public class Project3 {
 		}
 	}
 
+	/**
+	 * Implementation of Kruskal's Algorithm for Minimum Spanning Trees on weighted graphs
+	 * @return List of edges in the Minimum Spanning Tree
+	 */
 	private EdgeList MST() {
 		UpTree tree = new UpTree();
 		EdgeList edges = new EdgeList(); // the set of edges in the MST

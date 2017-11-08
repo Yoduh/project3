@@ -1,21 +1,18 @@
 package proj3;
 
 /**
- * Extends AbstractList of generic type as new LinkedAbstractList 
- * that does not allow null or duplicate elements 
+ * A sorted linked list implementation that uses Edge objects 
+ * custom to CSC 316 project 3.
  * @author aehandlo
  *
  */
 public class EdgeList {
 	private Edge front;
 	private int size;
-	private Edge back;
 	
 	
 	/**
-	 * Constructor for LinkedAbstractList creates a new 
-	 * LinkedAbstractList that does not allow for null or
-	 * duplicate elements
+	 * Constructor creates a new list
 	 * @param capacity of list
 	 */
 	public EdgeList() {
@@ -24,10 +21,9 @@ public class EdgeList {
 	}
 	
 	/**
-	 * Returns E at given index
-	 * @param idx is index of element to be returned
-	 * @return E the element to be returned at specified
-	 * index.
+	 * Returns Edge at given index
+	 * @param idx is index of the Edge to be returned
+	 * @return the Edge to be returned at specified index.
 	 * 
 	 */
 	public Edge get(int idx) {
@@ -43,12 +39,12 @@ public class EdgeList {
 			throw new IndexOutOfBoundsException();
 		}
 		
-		//return element at zero
+		//return Edge at zero
 		if (idx == 0) {
 			return current;
 		}
 		
-		//return element greater than zero
+		//return Edge greater than zero
 		if (front != null) {
 			while (current != null && idx > 0) {
 				previous = current;
@@ -62,7 +58,7 @@ public class EdgeList {
 	}
 	
 	/**
-	 * Adds item to the rear of the list
+	 * Adds Edge to the list and sorts
 	 * @param e Edge object being added to the list
 	 * @throws NullPointerException if the object to add is null
 	 * @throws IllegalArgumentException if a duplicate object in the list is detected
@@ -83,7 +79,6 @@ public class EdgeList {
 		// insert in empty list
 		if (size == 0) {
 			front = e;
-			back = front;
 		} 
 		// special case: adding to front
 		else if(front.getVertex1() > e.getVertex1() || (front.getVertex1() == e.getVertex1() && front.getVertex2() > e.getVertex2())) {
@@ -115,8 +110,8 @@ public class EdgeList {
 	
 	
 	/**
-	 * Returns the size of the AbstractLinkedList
-	 * @return size is the size of the AbstractLinkedList
+	 * Returns size of the list
+	 * @return the size of the list
 	 */
 	public int size() {
 		return size;
