@@ -11,7 +11,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Scanner;
 
-
+/**
+ * Implementation of Kruskal's MST algorithm for finding Minimum Spanning Tree
+ * of a weighted graph using Heap, Adjacency List, and Up-Tree data structures.
+ * @author aehandlo
+ *
+ */
 public class Project3 {
 	
 	Heap heap = new Heap();
@@ -30,26 +35,21 @@ public class Project3 {
 	 * @throws IOException if problem with input/output
 	 */
 	
-	public void execute() throws FileNotFoundException, IOException {
+	private void execute() throws FileNotFoundException, IOException {
 		// prepare input and output streams
 		// for redirection
 		BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in, "UTF-8"));
 		BufferedWriter outputWriter = new BufferedWriter(new OutputStreamWriter(System.out, "UTF-8"));
 		
 		// for files
-		/*
 		if(!inputReader.ready()) {
-			System.out.println("Enter an input filename (e.g. \"filename.txt\"): ");
+			System.out.println("Enter an input filename (e.g. \"input.txt\"): ");
 			File inputFileName = new File(inputReader.readLine());
-			System.out.println("Enter an output filename (e.g. \"filename.txt\"): ");
+			System.out.println("Enter an output filename (e.g. \"output.txt\"): ");
 			File outputFileName = new File(inputReader.readLine());
 			inputReader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFileName), "UTF-8"));
 			outputWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFileName), "UTF-8"));
-		}*/
-		// DELETE THIS NEPHEW
-		inputReader = new BufferedReader(new InputStreamReader(new FileInputStream("src/proj3/input.txt"), "UTF-8"));
-		// DELETE THIS NEPHEW
-		outputWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("src/proj3/output.txt"), "UTF-8"));
+		}
 		
 		String line = inputReader.readLine();
 		Scanner scan = new Scanner(line);
@@ -70,43 +70,50 @@ public class Project3 {
 			line = inputReader.readLine();
 			scan = new Scanner(line);
 		}
-		outputHeap(); // print heap now before using deleteMin to find the Minimum Spanning Tree messes up the heap
+		outputHeap(outputWriter); // print heap now before using deleteMin to find the Minimum Spanning Tree messes up the heap
 		EdgeList mstEdges = MST();
-		outputRest(mstEdges); // print rest of the data
+		outputRest(mstEdges, outputWriter); // print rest of the data
 		
 		scan.close();
 		inputReader.close();
 		outputWriter.close();
 	}
 
-	private void outputHeap() {
+	private void outputHeap(BufferedWriter outputWriter) throws IOException {
 		// print Heap
 		for(int i = 0; i < heap.size(); i++) {
-			System.out.printf("%4d %4d\n", heap.printEdge(i).getVertex1(), heap.printEdge(i).getVertex2());
+			String print = String.format("%4d %4d\n", heap.printEdge(i).getVertex1(), heap.printEdge(i).getVertex2());
+			outputWriter.write(print);
 		}
 	}
 
-	private void outputRest(EdgeList mstEdges) {
+	private void outputRest(EdgeList mstEdges, BufferedWriter outputWriter) throws IOException {
+		String print;
 		// print MST
 		for(int i = 0; i < mstEdges.size(); i++) {
-			System.out.printf("%4d %4d\n", mstEdges.get(i).getVertex1(), mstEdges.get(i).getVertex2());
+			print = String.format("%4d %4d\n", mstEdges.get(i).getVertex1(), mstEdges.get(i).getVertex2());
+			outputWriter.write(print);
 		}
 		
 		// print Adjacency List
 		for(int i = 0; i < aList.size(); i++) {
 			if(aList.getEdge(i).get(0).getVertex1() != i) {
-				System.out.printf("%4d", aList.getEdge(i).get(0).getVertex1());
+				print = String.format("%4d", aList.getEdge(i).get(0).getVertex1());
+				outputWriter.write(print);
 			} else {
-				System.out.printf("%4d", aList.getEdge(i).get(0).getVertex2());
+				print = String.format("%4d", aList.getEdge(i).get(0).getVertex2());
+				outputWriter.write(print);
 			}
 			for(int j = 1; j < aList.getEdge(i).size(); j++) {
 				if(aList.getEdge(i).get(j).getVertex1() != i) {
-					System.out.printf(" %4d", aList.getEdge(i).get(j).getVertex1());
+					print = String.format(" %4d", aList.getEdge(i).get(j).getVertex1());
+					outputWriter.write(print);
 				} else {
-					System.out.printf(" %4d", aList.getEdge(i).get(j).getVertex2());
+					print = String.format(" %4d", aList.getEdge(i).get(j).getVertex2());
+					outputWriter.write(print);
 				}
 			}
-			System.out.println();
+			outputWriter.newLine();
 		}
 	}
 
